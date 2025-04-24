@@ -13,7 +13,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import ContentType
 from aiogram.utils.callback_answer import CallbackAnswerMiddleware
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
-from aiogram.webhook.base import BaseRequestHandler
+from aiogram.webhook.aiohttp_server import BaseRequestHandler
 from aiohttp import web
 from faster_whisper import WhisperModel
 import yt_dlp

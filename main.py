@@ -18,13 +18,13 @@ from aiohttp import web
 from faster_whisper import WhisperModel
 import yt_dlp
 
-TOKEN = "YOUR_BOT_TOKEN"
+TOKEN = "8191487892:AAEdaDeZ2EwBLA90RrjU1nuR0nkfitpZo5o"
 WEBHOOK_HOST = "https://your-deployment-url.com"
 WEBHOOK_PATH = "/webhook"
 WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 DOWNLOAD_DIR = "downloads"
 REQUIRED_CHANNEL = "@qolkaqarxiska2"
-ADMIN_ID = 5240873494
+ADMIN_ID = 6964068910
 FILE_SIZE_LIMIT = 50 * 1024 * 1024
 
 bot = Bot(token=TOKEN, parse_mode=ParseMode.HTML)

@@ -1,4 +1,3 @@
-
 import re
 import uuid
 import os
@@ -13,11 +12,11 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import ContentType
 from aiogram.utils.callback_answer import CallbackAnswerMiddleware
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
-from aiogram.webhook.aiohttp_server import BaseRequestHandler
 from aiohttp import web
 from faster_whisper import WhisperModel
 import yt_dlp
 
+# Bot settings
 TOKEN = "8191487892:AAEdaDeZ2EwBLA90RrjU1nuR0nkfitpZo5o"
 WEBHOOK_HOST = "https://telegram-bot-media-transcriber-iy2x.onrender.com"
 WEBHOOK_PATH = "/webhook"
@@ -115,10 +114,9 @@ async def handle_audio_video(message: Message):
 
     if transcription:
         if len(transcription) > 2000:
-            file = FSInputFile.from_path("transcription.txt")
             with open("transcription.txt", "w") as f:
                 f.write(transcription)
-            await bot.send_document(message.chat.id, document=file)
+            await bot.send_document(message.chat.id, FSInputFile("transcription.txt"))
             os.remove("transcription.txt")
         else:
             await message.reply(transcription)
@@ -180,4 +178,10 @@ SimpleRequestHandler(dispatcher=dp, bot=bot).register(app, path=WEBHOOK_PATH)
 setup_application(app, dp, bot=bot)
 
 if __name__ == "__main__":
-    web.run_app(app, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
+    web.run_app(
+        app,
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 8080)),
+        on_startup=[lambda app: on_startup(bot)],
+        on_shutdown=[lambda app: on_shutdown(bot)]
+    )

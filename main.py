@@ -10,8 +10,9 @@ from flask import Flask, request
 from dotenv import load_dotenv
 
 # --- Load environment variables ---
-load_dotenv()
-TOKEN = os.getenv("8191487892:AAEdaDeZ2EwBLA90RrjU1nuR0nkfitpZo5o")
+# load_dotenv() # No longer needed
+# TOKEN = os.getenv("YOUR_BOT_TOKEN") # No longer needed
+TOKEN = "8191487892:AAEdaDeZ2EwBLA90RrjU1nuR0nkfitpZo5o"  # **WARNING: Hardcoded token**
 REQUIRED_CHANNEL = "@qolkaqarxiska2"
 
 # --- Configuration ---
@@ -169,3 +170,4 @@ if __name__ == "__main__":
     setup_webhook()
     # start Flask server
     app.run(host=WEBAPP_HOST, port=WEBAPP_PORT)
+

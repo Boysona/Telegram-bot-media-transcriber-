@@ -19,7 +19,7 @@ from faster_whisper import WhisperModel
 import yt_dlp
 
 TOKEN = "8191487892:AAEdaDeZ2EwBLA90RrjU1nuR0nkfitpZo5o"
-WEBHOOK_HOST = "https://your-deployment-url.com"
+WEBHOOK_HOST = "https://telegram-bot-media-transcriber-iy2x.onrender.com"
 WEBHOOK_PATH = "/webhook"
 WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 DOWNLOAD_DIR = "downloads"

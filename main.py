@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 
 # --- Load environment variables ---
 load_dotenv()
-TOKEN = os.getenv("8191487892:AAEdaDeZ2EwBLA90RrjU1nuR0nkfitpZo5o")  # make sure your .env has e.g. TOKEN=8191487892:AAE...
+TOKEN = os.getenv("8191487892:AAEdaDeZ2EwBLA90RrjU1nuR0nkfitpZo5o")
 REQUIRED_CHANNEL = "@qolkaqarxiska2"
 
 # --- Configuration ---

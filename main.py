@@ -1,156 +1,288 @@
-import os
+Speech recognition 
+
+import re
 import uuid
+import os
 import shutil
-import requests
-from faster_whisper import WhisperModel
-from telebot import TeleBot, types
-from telebot.types import InputFile
-from flask import Flask, request
-from dotenv import load_dotenv
+import logging
 import subprocess
+import requests
+from flask import Flask, request, abort
+import telebot
+import speech_recognition as sr
 
-# --- Config ---
-TOKEN = "8191487892:AAEdaDeZ2EwBLA90RrjU1nuR0nkfitpZo5o"  # BAD practice: use .env in production
+# Configure logger
+logging.basicConfig(level=logging.INFO)
+
+# Replace with your actual token
+TOKEN = "7920977306:AAFRR5ZIaPcD1rbmjSKxsNisQZZpPa7zWPs"
+bot = telebot.TeleBot(TOKEN)
+
+# Replace with your channel
 REQUIRED_CHANNEL = "@qolkaqarxiska2"
-DOWNLOAD_DIR = "downloads"
-WEBHOOK_HOST = "https://telegram-bot-media-transcriber-iy2x.onrender.com"
-WEBHOOK_PATH = "/webhook"
-WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
-WEBAPP_HOST = "0.0.0.0"
-WEBAPP_PORT = int(os.getenv("PORT", 8080))
 
-# Clean old files
-if os.path.exists(DOWNLOAD_DIR):
-    shutil.rmtree(DOWNLOAD_DIR)
-os.makedirs(DOWNLOAD_DIR, exist_ok=True)
-
-# Load whisper once
-model = WhisperModel(model_size_or_path="tiny", device="cpu", compute_type="int8")
-
-bot = TeleBot(TOKEN)
+# Initialize Flask app
 app = Flask(__name__)
 
-# --- Helpers ---
-def check_subscription(user_id: int) -> bool:
+# User tracking
+existing_users = set()
+if os.path.exists('users.txt'):
+    with open('users.txt', 'r') as f:
+        for line in f:
+            existing_users.add(line.strip())
+
+# Admin configuration
+ADMIN_ID = 6964068910
+admin_state = {}
+
+# File download directory
+DOWNLOAD_DIR = "downloads"
+os.makedirs(DOWNLOAD_DIR, exist_ok=True)
+
+# File size limit (20MB in bytes)
+FILE_SIZE_LIMIT = 20 * 1024 * 1024
+
+# SpeechRecognition setup
+recognizer = sr.Recognizer()
+
+def check_subscription(user_id):
     try:
         member = bot.get_chat_member(REQUIRED_CHANNEL, user_id)
         return member.status in ['member', 'administrator', 'creator']
-    except Exception:
+    except telebot.apihelper.ApiTelegramException as e:
+        logging.error(f"Error checking subscription: {e}")
         return False
 
-def send_subscription_message(chat_id: int):
-    msg = f"⚠️ You must join {REQUIRED_CHANNEL} to use this bot!"
-    keyboard = types.InlineKeyboardMarkup()
-    keyboard.add(types.InlineKeyboardButton(text="Join Channel", url=f"https://t.me/{REQUIRED_CHANNEL[1:]}"))
-    bot.send_message(chat_id, msg, reply_markup=keyboard)
+def send_subscription_message(chat_id):
+    message = f"⚠️ Please join {REQUIRED_CHANNEL} to use this bot!\n\nJoin the channel and try again."
+    markup = telebot.types.InlineKeyboardMarkup()
+    markup.add(telebot.types.InlineKeyboardButton(
+        text="Join Channel",
+        url=f"https://t.me/{REQUIRED_CHANNEL[1:]}"
+    ))
+    bot.send_message(chat_id, message, reply_markup=markup)
 
-def download_file(file_path_on_telegram: str, destination: str):
-    file_info = bot.get_file(file_path_on_telegram)
-    file_url = f"https://api.telegram.org/file/bot{TOKEN}/{file_info.file_path}"
-    response = requests.get(file_url, stream=True)
-    response.raise_for_status()
-    with open(destination, 'wb') as f:
-        for chunk in response.iter_content(1024):
-            f.write(chunk)
-
-def convert_to_wav(input_path: str, output_path: str):
-    subprocess.run([
-        "ffmpeg", "-y", "-i", input_path,
-        "-ar", "16000", "-ac", "1", output_path
-    ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-
-def transcribe_audio(file_path: str) -> str | None:
-    try:
-        segments, _ = model.transcribe(file_path, beam_size=1)
-        return " ".join(s.text for s in segments)
-    except Exception as e:
-        print(f"Transcription error: {e}")
-        return None
-
-# --- Handlers ---
 @bot.message_handler(commands=['start'])
-def start_handler(message: types.Message):
+def start_handler(message):
     if not check_subscription(message.from_user.id):
         return send_subscription_message(message.chat.id)
 
-    name = f"@{message.from_user.username}" if message.from_user.username else message.from_user.first_name
-    bot.send_message(message.chat.id,
-        f"👋 Salam {name}!\n\n"
-        "• Send me voice, video, or audio file and I’ll transcribe it to text!")
+    user_id = str(message.from_user.id)
+    if user_id not in existing_users:
+        existing_users.add(user_id)
+        with open('users.txt', 'a') as f:
+            f.write(f"{user_id}\n")
+
+    if message.from_user.id == ADMIN_ID:
+        markup = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+        markup.add("Send Ads (Broadcast)", "Total Users")
+        bot.send_message(message.chat.id, "Admin Panel", reply_markup=markup)
+    else:
+        first_name = message.from_user.first_name or "there"
+        username = f"@{message.from_user.username}" if message.from_user.username else first_name
+        text = (
+            f"👋 Salam {username}\n• Please send me any of the following:\n\n"
+            f"• Voice message 🎤\n"
+            f"• Video message 🎥\n"
+            f"• Audio file 🎵\n"
+            f"• Video file 📹\n"
+            f"• I will transcribe it and send you the text."
+        )
+        bot.send_message(message.chat.id, text)
+
+@bot.message_handler(func=lambda msg: msg.text == "Total Users" and msg.from_user.id == ADMIN_ID)
+def show_total_users(message):
+    bot.send_message(message.chat.id, f"Total users: {len(existing_users)}")
+
+@bot.message_handler(func=lambda msg: msg.text == "Send Ads (Broadcast)" and msg.from_user.id == ADMIN_ID)
+def start_broadcast(message):
+    admin_state[message.from_user.id] = 'awaiting_broadcast'
+    bot.send_message(message.chat.id, "Send the message you want to broadcast:")
+
+@bot.message_handler(func=lambda msg: msg.from_user.id == ADMIN_ID and admin_state.get(msg.from_user.id) == 'awaiting_broadcast',
+                    content_types=['text', 'photo', 'video', 'audio', 'document', 'voice', 'sticker'])
+def handle_broadcast(message):
+    admin_state[message.from_user.id] = None
+    success = 0
+    failures = 0
+
+    for user_id in existing_users:
+        try:
+            bot.copy_message(user_id, message.chat.id, message.message_id)
+            success += 1
+        except Exception as e:
+            logging.error(f"Failed to send to {user_id}: {e}")
+            failures += 1
+
+    bot.send_message(message.chat.id, f"Broadcast complete!\nSuccess: {success}\nFailures: {failures}")
 
 @bot.message_handler(content_types=['voice', 'video_note', 'audio', 'video'])
-def handle_media(message: types.Message):
+def handle_audio_message(message):
     if not check_subscription(message.from_user.id):
         return send_subscription_message(message.chat.id)
 
-    file_id = None
-    file_size = 0
+    # Determine file size
+    file_size = None
     if message.voice:
-        file_id = message.voice.file_id; file_size = message.voice.file_size
+        file_size = message.voice.file_size
     elif message.video_note:
-        file_id = message.video_note.file_id; file_size = message.video_note.file_size
+        file_size = message.video_note.file_size
     elif message.video:
-        file_id = message.video.file_id; file_size = message.video.file_size
+        file_size = message.video.file_size
     elif message.audio:
-        file_id = message.audio.file_id; file_size = message.audio.file_size
+        file_size = message.audio.file_size
 
-    if file_size > 20 * 1024 * 1024:
-        return bot.reply_to(message, "⚠️ Sorry, the file is too large. Please send a file smaller than 20MB "
-            "or use @Video_to_audio_robot to convert it to audio if it’s a video, "
-            "or send the video in a lower resolution like 256p.")
+    if file_size and file_size > FILE_SIZE_LIMIT:
+        bot.send_message(
+            message.chat.id,
+            f"⚠️ Sorry, the file is too large. Please send a file smaller than 20MB or convert it to audio."
+        )
+        return
 
-    unique_id = str(uuid.uuid4())
-    raw_path = os.path.join(DOWNLOAD_DIR, f"{unique_id}.input")
-    wav_path = os.path.join(DOWNLOAD_DIR, f"{unique_id}.wav")
-
-    status = bot.reply_to(message, "📥 Downloading file...")
-    bot.send_chat_action(message.chat.id, 'typing')
-
+    file_path = None
     try:
-        download_file(file_id, raw_path)
-        bot.edit_message_text("🔄 Converting and transcribing this may take some time if the audio is very long...", status.chat.id, status.message_id)
-
-        convert_to_wav(raw_path, wav_path)
-        transcription = transcribe_audio(wav_path)
-        bot.delete_message(status.chat.id, status.message_id)
-
-        if transcription:
-            if len(transcription) > 4000:
-                txt_path = os.path.join(DOWNLOAD_DIR, "transcription.txt")
-                with open(txt_path, "w", encoding="utf-8") as f:
-                    f.write(transcription)
-                with open(txt_path, 'rb') as f:
-                    bot.send_document(message.chat.id, f)
-                os.remove(txt_path)
-            else:
-                bot.send_message(message.chat.id, transcription)
+        # Download the file
+        if message.voice:
+            file_info = bot.get_file(message.voice.file_id)
+        elif message.video_note:
+            file_info = bot.get_file(message.video_note.file_id)
+        elif message.video:
+            file_info = bot.get_file(message.video.file_id)
         else:
-            bot.send_message(message.chat.id, "Ma awoodo inaan qoro qoraalka.")
+            file_info = bot.get_file(message.audio.file_id)
+
+        unique_id = str(uuid.uuid4())
+        # Save original container (ogg/m4a/mp4, etc.)
+        file_path = os.path.join(DOWNLOAD_DIR, f"{unique_id}")
+        ext = os.path.splitext(file_info.file_path)[1]
+        file_path += ext
+
+        downloaded_file = bot.download_file(file_info.file_path)
+        with open(file_path, 'wb') as f:
+            f.write(downloaded_file)
+
+        bot.send_chat_action(message.chat.id, 'typing')
+        transcription = transcribe_audio(file_path)
+        if transcription:
+            # If too long, send as file
+            if len(transcription) > 2000:
+                with open("transcription.txt", "w", encoding='utf-8') as f:
+                    f.write(transcription)
+                with open("transcription.txt", "rb") as f:
+                    bot.reply_to(message, document=f)
+                os.remove("transcription.txt")
+            else:
+                bot.reply_to(message, transcription)
+        else:
+            bot.send_message(message.chat.id, "Could not transcribe the audio.")
+
     except Exception as e:
         bot.send_message(message.chat.id, f"Error: {e}")
     finally:
-        for f in [raw_path, wav_path]:
-            if os.path.exists(f):
-                os.remove(f)
+        if file_path and os.path.exists(file_path):
+            os.remove(file_path)
 
-@bot.message_handler(func=lambda m: True)
-def handle_other(message: types.Message):
+@bot.message_handler(func=lambda m: True, content_types=['text', 'sticker', 'document', 'photo'])
+def handle_other_messages(message):
     if not check_subscription(message.from_user.id):
         return send_subscription_message(message.chat.id)
-    bot.send_message(message.chat.id, "😞 I’m sorry, just send the media file so I can write it and send it back to you.")
+    bot.send_message(
+        message.chat.id,
+        "Please send one of these file types:\n"
+        "• Voice message 🎤\n• Video message 🎥\n"
+        "• Audio file 🎵\n• Video file 📹\n\n"
+        "I'll transcribe it to text!"
+    )
 
-# --- Webhook ---
-@app.route(WEBHOOK_PATH, methods=['POST'])
+def transcribe_audio(input_path: str) -> str | None:
+    """
+    Convert input file to WAV via ffmpeg, then run speech_recognition on it.
+    Returns the recognized text or None on failure.
+    """
+    try:
+        # Convert any input container to standard WAV
+        wav_path = input_path + ".wav"
+        cmd = [
+            "ffmpeg", "-y",
+            "-i", input_path,
+            "-ar", "16000",       # 16 kHz sample rate
+            "-ac", "1",           # mono
+            wav_path
+        ]
+        subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+        # Recognize with SpeechRecognition
+        with sr.AudioFile(wav_path) as source:
+            audio = recognizer.record(source)
+
+        text = recognizer.recognize_google(audio, language="en-US")
+        # Clean up the wav
+        os.remove(wav_path)
+        return text
+
+    except subprocess.CalledProcessError as e:
+        logging.error(f"ffmpeg conversion failed: {e}")
+    except sr.UnknownValueError:
+        logging.error("SpeechRecognition could not understand audio")
+    except sr.RequestError as e:
+        logging.error(f"SpeechRecognition request failed: {e}")
+    except Exception as e:
+        logging.error(f"Unexpected error in transcription: {e}")
+
+    # attempt to remove wav if it exists
+    try:
+        if os.path.exists(wav_path):
+            os.remove(wav_path)
+    except:
+        pass
+
+    return None
+
+@app.route('/', methods=['POST'])
 def webhook():
-    update = types.Update.de_json(request.get_data().decode('utf-8'))
-    bot.process_new_updates([update])
-    return '', 200
+    if request.headers.get('content-type') == 'application/json':
+        json_string = request.get_data().decode('utf-8')
+        update = telebot.types.Update.de_json(json_string)
+        bot.process_new_updates([update])
+        return '', 200
+    else:
+        abort(403)
 
-def setup_webhook():
-    bot.remove_webhook()
-    bot.set_webhook(url=WEBHOOK_URL)
+@app.route('/set_webhook', methods=['GET', 'POST'])
+def set_webhook_route():
+    webhook_url = request.args.get('url')
+    if webhook_url:
+        bot.set_webhook(url=webhook_url)
+        return f'Webhook set to: {webhook_url}', 200
+    else:
+        return 'Please provide a webhook URL as a query parameter.', 400
+
+@app.route('/delete_webhook', methods=['GET', 'POST'])
+def delete_webhook_route():
+    bot.delete_webhook()
+    return 'Webhook deleted', 200
+
+def set_telegram_webhook(webhook_url, bot_token):
+    """Sets the Telegram bot webhook."""
+    url = f"https://api.telegram.org/bot{bot_token}/setWebhook?url={webhook_url}"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        result = response.json()
+        if result.get('ok'):
+            print(f"Webhook successfully set to: {webhook_url}")
+        else:
+            print(f"Failed to set webhook: {result}")
+    except requests.exceptions.RequestException as e:
+        print(f"Error setting webhook: {e}")
 
 if __name__ == "__main__":
-    setup_webhook()
-    app.run(host=WEBAPP_HOST, port=WEBAPP_PORT)
+    if os.path.exists(DOWNLOAD_DIR):
+        shutil.rmtree(DOWNLOAD_DIR)
+    os.makedirs(DOWNLOAD_DIR, exist_ok=True)
+
+    bot.delete_webhook()
+    WEBHOOK_URL = "https://telegram-bot-media-transcriber-iy2x.onrender.com"
+    set_telegram_webhook(WEBHOOK_URL, TOKEN)
+    app.run(host="0.0.0.0", port=int(os.environ.get('PORT', 8080)))
 

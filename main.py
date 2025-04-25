@@ -75,7 +75,7 @@ def start_handler(message: types.Message):
 
     name = f"@{message.from_user.username}" if message.from_user.username else message.from_user.first_name
     bot.send_message(message.chat.id,
-        f"👋 Salan {name}!\n\n"
+        f"👋 Salam {name}!\n\n"
         "• Send me voice, video, or audio file and I’ll transcribe it to text!")
 
 @bot.message_handler(content_types=['voice', 'video_note', 'audio', 'video'])
@@ -95,7 +95,9 @@ def handle_media(message: types.Message):
         file_id = message.audio.file_id; file_size = message.audio.file_size
 
     if file_size > 20 * 1024 * 1024:
-        return bot.reply_to(message, "⚠️ File-ka waa weyn yahay (max 20MB). Fadlan isticmaal @Video_to_audio_robot.")
+        return bot.reply_to(message, "⚠️ Sorry, the file is too large. Please send a file smaller than 20MB "
+            "or use @Video_to_audio_robot to convert it to audio if it’s a video, "
+            "or send the video in a lower resolution like 256p.")
 
     unique_id = str(uuid.uuid4())
     raw_path = os.path.join(DOWNLOAD_DIR, f"{unique_id}.input")
@@ -106,7 +108,7 @@ def handle_media(message: types.Message):
 
     try:
         download_file(file_id, raw_path)
-        bot.edit_message_text("🔄 Converting and transcribing audio...", status.chat.id, status.message_id)
+        bot.edit_message_text("🔄 Converting and transcribing this may take some time if the audio is very long...", status.chat.id, status.message_id)
 
         convert_to_wav(raw_path, wav_path)
         transcription = transcribe_audio(wav_path)
@@ -135,7 +137,7 @@ def handle_media(message: types.Message):
 def handle_other(message: types.Message):
     if not check_subscription(message.from_user.id):
         return send_subscription_message(message.chat.id)
-    bot.send_message(message.chat.id, "😅 Fadlan ii soo dir cod, muuqaal ama audio!")
+    bot.send_message(message.chat.id, "😞 I’m sorry, just send the media file so I can write it and send it back to you.")
 
 # --- Webhook ---
 @app.route(WEBHOOK_PATH, methods=['POST'])

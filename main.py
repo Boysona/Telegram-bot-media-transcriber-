@@ -58,7 +58,7 @@ def send_subscription_message(chat_id):
         text="Join Channel",
         url=f"https://t.me/{REQUIRED_CHANNEL[1:]}"
     ))
-    bot.send_message(chat_id, "⚠️ Please join the channel to use this bot!", reply_markup=markup)
+    bot.send_message(chat_id, "⚠️ Please join the channel to beck again & use this bot!", reply_markup=markup)
 
 @bot.message_handler(commands=['start'])
 def start_handler(message):
@@ -109,7 +109,7 @@ def handle_file(message):
     file_size = (message.voice or message.audio or message.video or message.video_note).file_size
 
     if file_size > FILE_SIZE_LIMIT:
-        bot.send_message(message.chat.id, "⚠️ File too large! Max 20MB.")
+        bot.send_message(message.chat.id, "⚠️ File too large! Max 20MB allowed .")
         return
 
     file_info = bot.get_file((message.voice or message.audio or message.video or message.video_note).file_id)
@@ -168,7 +168,7 @@ def webhook():
 
 @app.route('/set_webhook', methods=['GET', 'POST'])
 def set_webhook():
-    webhook_url = "https://only-me-2v9g.onrender.com"
+    webhook_url = "https://telegram-bot-media-transcriber.onrender.com"
     if webhook_url:
         bot.set_webhook(url=webhook_url)
         return f'Webhook set to: {webhook_url}', 200
@@ -185,5 +185,5 @@ if __name__ == "__main__":
         shutil.rmtree(DOWNLOAD_DIR)
     os.makedirs(DOWNLOAD_DIR, exist_ok=True)
     bot.delete_webhook()
-    bot.set_webhook(url="https://only-me-2v9g.onrender.com")
+    bot.set_webhook(url="https://telegram-bot-media-transcriber.onrender.com")
     app.run(host="0.0.0.0", port=int(os.environ.get('PORT', 8080)))

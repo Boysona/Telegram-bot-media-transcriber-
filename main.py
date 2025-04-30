@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 # YOUR BOT TOKEN and CHANNEL
 TOKEN = "7861265259:AAFKD2vPgxUEWtCfQ2jho_q5LbBCG8pN61s"
-REQUIRED_CHANNEL = "@qolka_ka"
+REQUIRED_CHANNEL = "@guruubka_wasmada"
 
 bot = telebot.TeleBot(TOKEN)
 app = Flask(__name__)

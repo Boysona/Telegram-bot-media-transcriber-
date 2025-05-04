@@ -11,7 +11,7 @@ from flask import Flask, request, abort
 from faster_whisper import WhisperModel
 
 # Bot configuration
-TOKEN = "7648822901:AAGi4gZ8R3Xk9yT3nbXnB20Spv5BiTE2QWQ"
+TOKEN = "7648822901:AAH2J5yPQRkcIi3DSPXC9R77Jupqy299C_8"
 REQUIRED_CHANNEL = "@mediatranscriber"
 ADMIN_ID = 5978150981
 

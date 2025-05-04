@@ -46,7 +46,7 @@ total_processing_time = 0.0  # in seconds
 processing_start_time = None
 
 # Constants
-FILE_SIZE_LIMIT = 200 * 1024 * 1024
+FILE_SIZE_LIMIT = 20 * 1024 * 1024
 
 # Admin state
 admin_state = {}

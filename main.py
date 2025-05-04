@@ -45,7 +45,7 @@ def check_subscription(user_id):
 def send_subscription_message(chat_id):
     markup = telebot.types.InlineKeyboardMarkup()
     markup.add(telebot.types.InlineKeyboardButton("Join Channel", url=f"https://t.me/{REQUIRED_CHANNEL[1:]}"))
-    bot.send_message(chat_id, "⚠️ Please join the channel to use this bot!", reply_markup=markup)
+    bot.send_message(chat_id, "⚠️ first Please join the channel to use this bot!", reply_markup=markup)
 
 # Hashing
 def hash_file(path):
@@ -101,7 +101,7 @@ def process_file(message):
 
     media = message.voice or message.audio or message.video or message.video_note
     if media.file_size > 20 * 1024 * 1024:
-        bot.send_message(message.chat.id, "⚠️ File too large! Max 20MB.")
+        bot.send_message(message.chat.id, "⚠️ File too large! Max 20MB allowed .")
         return
 
     file_info = bot.get_file(media.file_id)
@@ -132,7 +132,7 @@ def process_file(message):
             else:
                 bot.send_message(message.chat.id, result)
         else:
-            bot.send_message(message.chat.id, "⚠️ Couldn't transcribe the audio.")
+            bot.send_message(message.chat.id, "⚠️ Couldn't transcribe the audio clear your audio.")
     except Exception as e:
         logging.error(f"Error: {e}")
         bot.send_message(message.chat.id, "⚠️ Error while processing.")

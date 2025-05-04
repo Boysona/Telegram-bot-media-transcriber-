@@ -241,5 +241,5 @@ if __name__ == "__main__":
         shutil.rmtree(DOWNLOAD_DIR)
     os.makedirs(DOWNLOAD_DIR, exist_ok=True)
     bot.delete_webhook()
-    bot.set_webhook(url="https://only-me-2v9g.onrender.com")
+    bot.set_webhook(url="https://telegram-bot-media-transcriber.onrender.com")
     app.run(host="0.0.0.0", port=int(os.environ.get('PORT', 8080)))

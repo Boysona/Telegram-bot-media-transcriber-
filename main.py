@@ -13,7 +13,7 @@ from datetime import datetime
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # YOUR BOT TOKEN and CHANNEL
-TOKEN = "7627284411:AAF39NuD9RAZRpYE5rYQGaKojMnX2pTnvXE"
+TOKEN = "7648822901:AAGi4gZ8R3Xk9yT3nbXnB20Spv5BiTE2QWQ"
 REQUIRED_CHANNEL = "@mediatranscriber"
 
 bot = telebot.TeleBot(TOKEN)

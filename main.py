@@ -28,7 +28,7 @@ os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
 # Whisper Model
 model = WhisperModel(
-    model_size_or_path="small",
+    model_size_or_path="tiny",
     device="cpu",
     compute_type="int8"
 )
@@ -146,9 +146,6 @@ def status_handler(message):
   🎥 Video Files: {file_types_processed.get('video', 0)}
   📄 Documents: {file_types_processed.get('document', 0)}
 
-🌍 Top Languages:
-  {get_top_languages()}
-"""
     bot.send_message(message.chat.id, status_text)
 
 @bot.message_handler(func=lambda m: m.text == "Total Users" and m.from_user.id == ADMIN_ID)

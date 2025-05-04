@@ -9,7 +9,7 @@ from faster_whisper import WhisperModel
 
 # BOT TOKEN & CHANNEL
 TOKEN = "7648822901:AAGi4gZ8R3Xk9yT3nbXnB20Spv5BiTE2QWQ"
-REQUIRED_CHANNEL = "https://t.me/mediatranscriber"
+REQUIRED_CHANNEL = "@mediatranscriber"
 ADMIN_ID = 5978150981
 
 bot = telebot.TeleBot(TOKEN)

@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 # YOUR BOT TOKEN and CHANNEL
 TOKEN = "7648822901:AAGi4gZ8R3Xk9yT3nbXnB20Spv5BiTE2QWQ"
-REQUIRED_CHANNEL = "mediatranscriber"
+REQUIRED_CHANNEL = "https://t.me/mediatranscriber"
 
 bot = telebot.TeleBot(TOKEN)
 app = Flask(__name__)

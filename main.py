@@ -28,7 +28,7 @@ os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
 # Whisper Model
 model = WhisperModel(
-    model_size_or_path="tiny",
+    model_size_or_path="large",
     device="cpu",
     compute_type="int8"
 )

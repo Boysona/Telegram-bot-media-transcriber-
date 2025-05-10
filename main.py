@@ -88,7 +88,7 @@ def send_subscription_message(chat_id):
         text="Join the Channel",
         url=f"https://t.me/{REQUIRED_CHANNEL[1:]}"
     ))
-    bot.send_message(chat_id, "🥺 𝗦𝗼𝗿𝗿𝘆 𝗱𝗲𝗮𝗿…
+    bot.send_message(chat_id, """🥺 𝗦𝗼𝗿𝗿𝘆 𝗱𝗲𝗮𝗿…
 🔰 𝗣𝗹𝗲𝗮𝘀𝗲 𝗷𝗼𝗶𝗻 𝘁𝗵𝗲 𝗰𝗵𝗮𝗻𝗻𝗲𝗹 @mediatranscriber 𝘁𝗼 𝘂𝘀𝗲 𝘁𝗵𝗶𝘀 𝗯𝗼𝘁
 ‼️ 𝗔𝗳𝘁𝗲𝗿 𝗷𝗼𝗶𝗻𝗶𝗻𝗴, 𝘀𝗲𝗻𝗱 /start 𝘁𝗼 𝗰𝗼𝗻𝘁𝗶𝗻𝘂𝗲", reply_markup=markup)
 

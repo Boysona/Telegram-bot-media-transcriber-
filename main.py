@@ -331,10 +331,9 @@ def handle_translate(message):
         return bot.send_message(message.chat.id, "No previous transcription found.")
     msg = bot.send_message(
         message.chat.id,
-        """
-Please type and sand the target language for translation (e.g., Arabic, Spanish) etc.
+        """Please type and send the target language for translation (e.g., Arabic, Spanish) etc.
 
-⚠️ Note: Translation of transcriptions in .txt files is currently unavailable"
+⚠️ Note: Translation of transcriptions in .txt files is currently unavailable"""
     )
     bot.register_next_step_handler(msg, lambda m: translate_text(m, user_id))
 
@@ -344,7 +343,11 @@ def translate_text(message, user_id):
     prompt = f"Translate the following text to {lang}:\n\n{original}"
     bot.send_chat_action(message.chat.id, 'typing')
     translation = ask_gemini(user_id, prompt)
-    bot.send_message(message.chat.id, f"**Translation ({lang})**:\n{translation}", parse_mode="Markdown")
+    bot.send_message(
+        message.chat.id,
+        f"**Translation ({lang})**:\n{translation}",
+        parse_mode="Markdown"
+    )
 
 # === END ADDED TRANSLATE ===
 

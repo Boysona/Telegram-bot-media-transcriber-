@@ -150,19 +150,21 @@ Enjoy transcribing your media files quickly and easily! If you have any question
 
 @bot.message_handler(commands=['status'])
 def status_handler(message):
-    total_users, monthly_active_users, weekly_active_users = get_user_counts()
-    status_text = f"""📈 Overall Statistics
+    total_users, _, _ = get_user_counts()
+    today = datetime.now().date()
+    users_today = sum(1 for uid, ts in user_data.items() if datetime.fromisoformat(ts).date() == today)
 
-👥 User Statistics:
-▫️ Total Users: {total_users}
-▫️ Active Users This Month: {monthly_active_users}
-▫️ Active Users This Week: {weekly_active_users}
+    status_text = f"""Today’s Activity – 🗓️
 
-🎯 Processing Statistics:
-▫️ Total Files Processed: {total_files_processed}
-▫️ Total Processing Time: {format_timedelta(total_processing_time)}
+📊 Users Today: {users_today}
 
-Thank you for using our service! 🙏
+Total Files Processing 🎯
+📁 Files Handled So Far: {total_files_processed}
+🎵 Audio Files: {file_type_counts['audio']}
+🎙️ Voice Clips: {file_type_counts['voice']}
+🎬 Videos: {file_type_counts['video'] + file_type_counts['video_note']}
+
+⏱️ Total Time Spent: {format_timedelta(total_processing_time)}
 """
     bot.send_message(message.chat.id, status_text)
 

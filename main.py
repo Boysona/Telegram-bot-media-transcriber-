@@ -331,7 +331,7 @@ def handle_translate(message):
         return bot.send_message(message.chat.id, "No previous transcription found.")
     msg = bot.send_message(
         message.chat.id,
-        "
+        """
 Please type and sand the target language for translation (e.g., Arabic, Spanish) etc.
 
 ⚠️ Note: Translation of transcriptions in .txt files is currently unavailable"

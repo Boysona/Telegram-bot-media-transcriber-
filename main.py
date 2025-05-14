@@ -82,7 +82,7 @@ def set_bot_info():
     ]
     bot.set_my_commands(commands)
     bot.set_my_description(
-        description="This Bot Does It All!
+        description="""This Bot Does It All!
 🎧 Automatically transcribes audio, voice notes & videos
 • Detects and supports multiple languages
 • ⚡ Super fast, highly accurate
@@ -97,7 +97,7 @@ Totally FREE — no sign-up, no cost, just pure convenience.
 ⏳ Save time. Get more done. Effortlessly! "
     )
     bot.set_my_short_description(
-        short_description="🎙️ Audio → Text | 📥 TikTok Downloader\n⚡ Fast • Easy • 100% Free"
+        short_description="🎙️ Audio → Text | 📥 TikTok Downloader\n⚡ Fast • Easy • 100% Free"""
     )
 
 def check_subscription(user_id):

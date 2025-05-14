@@ -1,4 +1,4 @@
-Hagaag, halkan waa koodhka oo dhan oo la saxay:
+
 import os
 import re
 import uuid

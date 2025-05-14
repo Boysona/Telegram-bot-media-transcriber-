@@ -142,9 +142,9 @@ def start_handler(message):
         name = f"@{message.from_user.username}" if message.from_user.username else message.from_user.first_name
         bot.send_message(
             message.chat.id,
-            f"👋 Salaam, {name}!\n"
-            f"Send me a voice message, audio, video, or even a TikTok video URL, and I'll transcribe it for you.\n"
-            f"For more info, type /help"
+            f"👋 Salom. {name}\n"
+            f"Send me a voice message, audio, video, or even a tiktok video URL, to transcribe \n"
+            f"more info, type /help"
         )
 
 @bot.message_handler(commands=['help'])

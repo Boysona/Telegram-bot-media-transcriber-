@@ -143,8 +143,22 @@ def start_handler(message):
         bot.send_message(
             message.chat.id,
             f"👋 Salom. {name}\n"
-            f"Send me a voice message, audio, video, or even a tiktok video URL, to transcribe \n"
-            f"more info, type /help"
+            f"I’m your smart assistant for turning voice, video, and audio into clean, readable text — fast, accurate, and in multiple languages.
+
+✅ What you can send:
+— 🎧 Voice messages
+— 📹 Videos
+— 🔊 Audio files
+— 🔗 TikTok video links
+
+✨ New Features:
+— ⏪ I can translate you your last transcription anytime
+— 🌍 I can translate your transcription into multiple languages
+— ✅ Results are high quality, ready to use or share
+
+Just drop your file or link — I’ll handle the rest.
+
+Need help? Type /help anytime"
         )
 
 @bot.message_handler(commands=['help'])

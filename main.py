@@ -142,7 +142,7 @@ def start_handler(message):
         name = f"@{message.from_user.username}" if message.from_user.username else message.from_user.first_name
         bot.send_message(
             message.chat.id,
-            f"👋 Salom. {name}\n"
+            f"""👋 Salom. {name}\n"
             f"I’m your smart assistant for turning voice, video, and audio into clean, readable text — fast, accurate, and in multiple languages.
 
 ✅ What you can send:
@@ -158,7 +158,7 @@ def start_handler(message):
 
 Just drop your file or link — I’ll handle the rest.
 
-Need help? Type /help anytime"
+Need help? Type /help anytime"""
         )
 
 @bot.message_handler(commands=['help'])

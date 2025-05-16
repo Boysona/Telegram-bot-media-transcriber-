@@ -169,9 +169,31 @@ def start_handler(message):
     if not check_subscription(message.from_user.id):
         return send_subscription_message(message.chat.id)
     bot.send_message(message.chat.id, "Send me a voice/audio/video or link to transcribe or download.")
+    @app.route('/', methods=['POST'])
+def webhook():
+    if request.headers.get('content-type') == 'application/json':
+        update = telebot.types.Update.de_json(request.get_data().decode('utf-8'))
+        bot.process_new_updates([update])
+        return '', 200
+    return abort(403)
 
-# --- Run ---
+@app.route('/set_webhook', methods=['GET','POST'])
+def set_webhook():
+    url = "https://telegram-bot-media-transcriber.onrender.com"
+    bot.set_webhook(url=url)
+    return f"Webhook set to {url}", 200
+
+@app.route('/delete_webhook', methods=['GET','POST'])
+def delete_webhook():
+    bot.delete_webhook()
+    return 'Webhook deleted.', 200
+
 if __name__ == "__main__":
-    logging.info("Bot is running...")
-    bot.infinity_polling()
-# ==================== END OF TELEGRAM BOT SCRIPT ====================
+    if os.path.exists(DOWNLOAD_DIR):
+        shutil.rmtree(DOWNLOAD_DIR)
+    os.makedirs(DOWNLOAD_DIR, exist_ok=True)
+    set_bot_info()
+    bot.delete_webhook()
+    bot.set_webhook(url="https://telegram-bot-media-transcriber-ihi5.onrender.com")
+    app.run(host="0.0.0.0", port=int(os.environ.get('PORT', 8080)))
+

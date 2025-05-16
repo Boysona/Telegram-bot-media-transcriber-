@@ -152,7 +152,7 @@ def start_handler(message):
 • Videos
 • Audio files
 • TikTok video link
-• to transcribe /download more info type commend - /info 👀"""
+• to transcribe & download more info type commend - /info 👀"""
         )
 
 @bot.message_handler(commands=['info'])

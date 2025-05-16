@@ -277,7 +277,7 @@ def callback_download_tiktok(call):
         bot.send_chat_action(call.message.chat.id, 'upload_video')
         with open(path, 'rb') as video:
             bot.send_video(call.message.chat.id, video)
-        bot.send_message(call.message.chat.id, f":\n{caption}")
+        bot.send_message(call.message.chat.id, f"\n{caption}")
         total_tiktok_downloads += 1
     except Exception as e:
         logging.error(f"TikTok download error: {e}")

@@ -88,12 +88,12 @@ def set_bot_info():
 
     # Short description (About)
     bot.set_my_short_description(
-        "This bot transcribes voice messages, audio files, video files, and links from tiktok for —fast & free"
+        "transcribe voice messages, audio files, video files, and links from tiktok videos for —fast & free"
     )
 
     # Full description (What can this bot do?)
     bot.set_my_description(
-        """This bot transcribes voice messages, audio files, video files, and even TikTok videos automatically.
+        """This bot transcribes voice messages, audio files, video files, and even links from TikTok videos automatically.
 • Supports multiple languages
 • Fast and accurate transcriptions
 • Includes translation & summarization features

@@ -29,7 +29,8 @@ DOWNLOAD_DIR = "downloads"
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
 # Whisper model for transcription
-model = WhisperModel(model_size_or_path="small", device="cpu", compute_type="int8")
+model = WhisperModel(model_size_or_path="base
+", device="cpu", compute_type="int8")
 
 # User tracking file
 users_file = 'users.json'

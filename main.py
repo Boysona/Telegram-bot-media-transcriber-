@@ -15,7 +15,7 @@ import yt_dlp
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Bot token and required channel
-TOKEN = "7648822901:AAG3ZJADuvTP_9Gmx0matFCsJU6aWeRJstk"
+TOKEN = "7648822901:AAFQEUx-S4bpD5qUMPHNB1P9jYCYSB4mzHU"
 REQUIRED_CHANNEL = "@mediatranscriber"
 
 bot = telebot.TeleBot(TOKEN)

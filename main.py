@@ -161,7 +161,7 @@ def help_handler(message):
     help_text = (
         """ℹ️ How to use this bot:
 
-1. **Join the Channel:** Make sure you've joined our channel: @mediatranscriber. This is required to use the bot.
+1. **Join the Channel:** Make sure you've joined our channel: https://t.me/transcriberbo. This is required to use the bot.
 
 2. **Send a File:** You can send voice messages, audio files, video files, video notes, or even TikTok video URLs directly to the bot.
 

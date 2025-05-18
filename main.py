@@ -88,8 +88,7 @@ def set_bot_info():
 
     # Short description (About)
     bot.set_my_short_description(
-        "transcribe voice messages, video messages, audio files, — 100% for free
-Fast, reliable, and unlimited!"
+        "transcribe voice messages, video messages, audio files, — 100% for free Fast, reliable, and unlimited"
     )
 
     # Full description (What can this bot do?)

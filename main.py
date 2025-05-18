@@ -338,8 +338,7 @@ def handle_file(message):
     
     file_obj = message.voice or message.audio or message.video or message.video_note
     if file_obj.file_size > FILE_SIZE_LIMIT:
-        return bot.send_message(message.chat.id, "⚠️The file you uploaded is too large.
-The maximum allowed size is 20MB.")
+        return bot.send_message(message.chat.id, "😞The file you uploaded is too large (Max size allowed: 20MB).")
     
     info = bot.get_file(file_obj.file_id)
     local_path = os.path.join(DOWNLOAD_DIR, f"{uuid.uuid4()}.ogg")

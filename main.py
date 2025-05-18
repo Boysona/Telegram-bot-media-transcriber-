@@ -88,7 +88,7 @@ def set_bot_info():
 
     # Short description (About)
     bot.set_my_short_description(
-        "transcribe voice messages, audio files, video files, and links from tiktok videos for —fast & free"
+        "transcribe voice messages, audio files, video massages, and links from tiktok videos transcribe — for free"
     )
 
     # Full description (What can this bot do?)
@@ -146,7 +146,7 @@ def start_handler(message):
         name = f"@{message.from_user.username}" if message.from_user.username else message.from_user.first_name
         bot.send_message(
             message.chat.id,
-            f"""👋🏻 Welcome dear
+            f"""👋🏻 Welcome dear!
 • Send me
 
 • Voice message
@@ -449,7 +449,7 @@ def fallback(message):
     update_user_activity(message.from_user.id)
     if not check_subscription(message.from_user.id):
         return send_subscription_message(message.chat.id)
-    bot.send_message(message.chat.id, "⚠️ Please send only voice, audio, video, or a TikTok video link.")
+    bot.send_message(message.chat.id, "😞 Please send only voice, audio, video, or a TikTok video link.")
 
 @app.route('/', methods=['POST'])
 def webhook():

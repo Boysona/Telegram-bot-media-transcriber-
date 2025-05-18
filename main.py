@@ -16,13 +16,13 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 # Bot token and required channel
 TOKEN = "7648822901:AAFQEUx-S4bpD5qUMPHNB1P9jYCYSB4mzHU"
-REQUIRED_CHANNEL = "@mediatranscriber"
+REQUIRED_CHANNEL = "@transcriberbo"
 
 bot = telebot.TeleBot(TOKEN)
 app = Flask(__name__)
 
 # Admin ID
-ADMIN_ID = 5978150981
+ADMIN_ID = 6964068910
 
 # Download directory
 DOWNLOAD_DIR = "downloads"

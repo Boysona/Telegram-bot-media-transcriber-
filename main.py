@@ -338,8 +338,7 @@ def handle_file(message):
     
     file_obj = message.voice or message.audio or message.video or message.video_note
     if file_obj.file_size > FILE_SIZE_LIMIT:
-        return bot.send_message(message.chat.id, "File too large!
-Max size allowed: 20MB
+        return bot.send_message(message.chat.id, "⚠️ File too large!Max size allowed: 20MB
 Please send a smaller file")
     
     info = bot.get_file(file_obj.file_id)

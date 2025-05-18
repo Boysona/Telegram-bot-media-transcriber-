@@ -101,7 +101,7 @@ def set_bot_info():
     )
 
 bot.set_my_description(
-    description="transcribe voice messages, audio files, video massages, for free
+    description="transcribe voice messages, audio files, videos , for free
 
 this Bot Created by 💎@botmakerrr "
 )

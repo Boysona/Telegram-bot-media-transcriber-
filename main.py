@@ -101,8 +101,7 @@ def set_bot_info():
     )
 
 bot.set_my_description(
-    description="transcribe voice messages, audio files, videos, for free
-help connect ☎️ @botmakerrr "
+    description="transcribe voice messages, audio files, videos, for free"
 )
 
 def check_subscription(user_id):
@@ -147,14 +146,14 @@ def start_handler(message):
         name = f"@{message.from_user.username}" if message.from_user.username else message.from_user.first_name
         bot.send_message(
             message.chat.id,
-            f"""👋🏻 Welcome dear ! {name}\n
-• Send me:
+            f"""👋🏻 Welcome dear
+• Send me
 
 • Voice message
 • Video massage 
 • Audio file
 • TikTok video link
-• to transcribe & download more info type commend - /info 👀"""
+• to transcribe for free more info type - /info"""
         )
 
 @bot.message_handler(commands=['info'])

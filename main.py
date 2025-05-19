@@ -22,7 +22,7 @@ bot = telebot.TeleBot(TOKEN)
 app = Flask(__name__)
 
 # Admin ID
-ADMIN_ID = 6964068910
+ADMIN_ID = 5978150981
 
 # Download directory
 DOWNLOAD_DIR = "downloads"

@@ -457,7 +457,7 @@ def handle_file(message):
 # List of common languages with emojis (ordered by approximate global prevalence/popularity)
 LANGUAGES = [
     {"name": "English", "flag": "🇬🇧"},
-    {"name": "Chinese (Simplified)", "flag": "🇨🇳"},
+    {"name": "Chinese", "flag": "🇨🇳"},
     {"name": "Spanish", "flag": "🇪🇸"},
     {"name": "Hindi", "flag": "🇮🇳"},
     {"name": "Arabic", "flag": "🇸🇦"},

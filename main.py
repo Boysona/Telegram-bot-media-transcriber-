@@ -94,8 +94,8 @@ admin_state = {}
 def set_bot_info():
     commands = [
         telebot.types.BotCommand("start", "Restart bot"),
-        telebot.types.BotCommand("status", "Show statistics"),
-        telebot.types.BotCommand("info", "Show instructions"),
+        telebot.types.BotCommand("status", "View Bot statistics"),
+        telebot.types.BotCommand("help", "View instructions"),
         telebot.types.BotCommand("language", "Change preferred language for translate/summarize"),
         telebot.types.BotCommand("privacy", "View privacy notice"), # Added privacy command
     ]
@@ -176,7 +176,7 @@ This bot transcribes voice messages, audio files, videos, and TikTok video links
 6.  **Commands:**
     -   `/start`: Restart the bot.
     -   `/status`: View bot statistics.
-    -   `/info`: Display these instructions.
+    -   `/help`: Display these instructions.
     -   `/language`: Change your preferred language for translations and summaries.
     -   `/privacy`: View the bot's privacy notice.
 

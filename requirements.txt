@@ -4,4 +4,4 @@ requests
 imageio-ffmpeg
 SpeechRecognition
 yt-dlp
-
+langdetect

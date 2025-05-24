@@ -1,6 +1,7 @@
-pyTelegramBotAPI
-faster-whisper
-requests
 Flask
-yt_dlp
+pyTelegramBotAPI
+requests
+imageio-ffmpeg
+SpeechRecognition
+yt-dlp
 

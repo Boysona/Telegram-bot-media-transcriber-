@@ -1,7 +1,5 @@
 Flask
 pyTelegramBotAPI
+yt-dlp
 requests
 imageio-ffmpeg
-SpeechRecognition
-yt-dlp
-langdetect
